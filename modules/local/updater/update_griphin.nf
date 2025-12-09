@@ -2,7 +2,7 @@ process UPDATE_GRIPHIN {
     tag "${project_id}"
     label 'process_low'
     stageInMode 'copy' // you need this or openpyxl complains that excel files aren't excel files. 
-    container 'quay.io/jvhagey/phoenix@sha256:2122c46783447f2f04f83bf3aaa076a99129cdd69d4ee462bdbc804ef66aa367'
+    container 'quay.io/jvhagey/phoenix@sha256:f7cb3aa4e3324cab43d8635be17da8ae15f62e39d380acda844d1c9deef69c60'
 
     input:
     path(griphins_excel)
