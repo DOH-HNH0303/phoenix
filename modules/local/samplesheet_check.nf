@@ -3,7 +3,7 @@ process SAMPLESHEET_CHECK {
     label 'process_low'
     stageInMode 'copy'
     // base_v2.2.0 - MUST manually change below (line 24)!!!
-    container 'quay.io/jvhagey/phoenix@sha256:f7cb3aa4e3324cab43d8635be17da8ae15f62e39d380acda844d1c9deef69c60'
+    container 'public.ecr.aws/o8h2f0o1/phoenix:2.2.0-beta-waphl'
 
     input:
     path(samplesheet)

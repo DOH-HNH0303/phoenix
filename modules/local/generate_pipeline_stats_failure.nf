@@ -2,7 +2,7 @@ process GENERATE_PIPELINE_STATS_FAILURE {
     tag "${meta.id}"
     label 'process_single'
     // base_v2.2.0 - MUST manually change below (line 35)!!!
-    container 'quay.io/jvhagey/phoenix@sha256:f7cb3aa4e3324cab43d8635be17da8ae15f62e39d380acda844d1c9deef69c60'
+    container 'public.ecr.aws/o8h2f0o1/phoenix:2.2.0-beta-waphl'
 
     input:
     tuple val(meta), path(raw_qc), \
