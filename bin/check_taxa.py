@@ -5,6 +5,7 @@ import numpy as np
 import argparse
 import csv
 import os, sys
+import shutil
 
 ##Makes a summary Excel file when given a series of output summary line files from PhoeNiX
 ##Usage: >python GRiPHin.py -s ./samplesheet.csv -a ResGANNCBI_20220915_srst2.fasta -c control_file.csv -o output --phoenix --scaffolds
@@ -46,40 +47,56 @@ def main():
                     exit(1)
 
         # Step 2: If the string is present, find the required line
-        with open(args.ani_file, "r") as csv_file:
-            for line in csv_file:
-                if "Escherichia_coli" in line:
-                    escherichia_coli_line = line
-                    break
-            else:
-                raise ValueError("No line with 'Escherichia_coli' found.")
+        try:
+            with open(args.ani_file, "r") as csv_file:
+                for line in csv_file:
+                    if "Escherichia_coli" in line:
+                        escherichia_coli_line = line
+                        break
+                
+                else:
+                    raise ValueError("No line with 'Escherichia_coli' found.")
+                
+                        # Parse the line by tabs
+            parts = escherichia_coli_line.strip().split("\t")
+            if len(parts) < 5:
+                raise ValueError("Unexpected format in Escherichia_coli line.")
 
-        # Parse the line by tabs
-        parts = escherichia_coli_line.strip().split("\t")
-        if len(parts) < 5:
-            raise ValueError("Unexpected format in Escherichia_coli line.")
+            genome = parts[1].replace("reference_dir/", "")
+            percent_ani_match = float(parts[2])
+            fragment_matches = int(parts[3])
+            total_fragments = int(parts[4])
 
-        genome = parts[1].replace("reference_dir/", "")
-        percent_ani_match = float(parts[2])
-        fragment_matches = int(parts[3])
-        total_fragments = int(parts[4])
+            # Calculate best_coverage using bash logic
+            best_coverage = round((100 * fragment_matches / total_fragments), 2)
 
-        # Calculate best_coverage using bash logic
-        best_coverage = round((100 * fragment_matches / total_fragments), 2)
+            # Step 3: Update the file using pandas
+            df = pd.read_csv(args.format_ani_file, sep="\t")
+            df["Source File"] = genome
+            df["Organism"] = "Escherichia coli"
+            df["% ID"] = round(percent_ani_match, 2)
+            df["% Coverage"] = round(best_coverage, 2)
 
-        # Step 3: Update the file using pandas
-        df = pd.read_csv(args.format_ani_file, sep="\t")
-        df["Source File"] = genome
-        df["Organism"] = "Escherichia coli"
-        df["% ID"] = round(percent_ani_match, 2)
-        df["% Coverage"] = round(best_coverage, 2)
+            print(df)
+            print(args.output)
 
-        print(df)
-        print(args.output)
+            # Save updated DataFrame to a new file
+            df.to_csv(args.output, sep="\t", index=False)
+            print("File updated successfully.")
 
-        # Save updated DataFrame to a new file
-        df.to_csv(args.output, sep="\t", index=False)
-        print("File updated successfully.")
+            # Save updated DataFrame to a new file
+            df.to_csv(args.output, sep="\t", index=False)
+            print("File updated successfully.")
+
+
+        except ValueError as e: 
+            print(CRED + str(e) + CEND) 
+            print("Shigella not verified but E. coli not in ANI results. Please verify taxonomy")
+            shutil.copy(args.ani_file, args.output)
+
+
+
+
 
     except FileNotFoundError as e:
         print(f"File not found: {e}")
