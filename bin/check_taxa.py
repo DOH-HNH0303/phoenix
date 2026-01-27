@@ -92,7 +92,7 @@ def main():
         except ValueError as e: 
             print(CRED + str(e) + CEND) 
             print("Shigella not verified but E. coli not in ANI results. Please verify taxonomy")
-            shutil.copy(args.ani_file, args.output)
+            shutil.copy(args.format_ani_file, args.output)
 
 
 
