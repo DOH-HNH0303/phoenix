@@ -2,7 +2,7 @@ process MLST {
     tag "$meta.id"
     label 'process_medium'
     // 2.23.0_12312024 - must edit manually below (line 28)!!!
-    container 'quay.io/jvhagey/mlst@sha256:14c4ef46ab0614d8de6ad6f2b1edd1820fea29f08ac12c31339701003b8b5266'
+    container 'quay.io/jvhagey/mlst@sha256:a67904d356118f9c163d26000d4d78cc449e3205145f87be28726869d67602f7'
 
     input:
     tuple val(meta), path(fasta), val(fairy_outcome), path(taxonomy)
