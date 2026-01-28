@@ -48,7 +48,7 @@ process MLST {
         \$unzipped_fasta \\
         > ${prefix}.tsv
 
-    scheme=$(cut -d $'\t' -f2 ${prefix}.tsv | tail -n1)
+    scheme=\$(cut -d \$'\t' -f2 ${prefix}.tsv | tail -n1)
 
     if [[ \$scheme == "abaumannii_2" ]]; then
         mv ${prefix}.tsv ${prefix}_1.tsv
