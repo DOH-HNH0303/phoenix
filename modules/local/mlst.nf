@@ -130,7 +130,6 @@ process MLST {
     "${task.process}":
         mlst: \$( echo \$(mlst --version 2>&1) | sed 's/mlst //' )
         mlst_db: ${mlst_version}_${container}
-        # mlst_db: \$db_version
         mlst_container: ${container}
     END_VERSIONS
     """
