@@ -124,12 +124,12 @@ process MLST {
         db_version=\$(cat /opt/conda/envs/phoenix/db/db_version | date -f - +%Y-%m-%d )
     fi
 
-    mlst_ver=\$( echo \$(mlst --version 2>&1) | sed 's/mlst //' )
+    
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        mlst: \$mlst_ver
-        mlst_db: \${mlst_ver}_${container}
+        mlst: \$( echo \$(mlst --version 2>&1) | sed 's/mlst //' )
+        mlst_db: ${mlst_version}_${container}
         # mlst_db: \$db_version
         mlst_container: ${container}
     END_VERSIONS
