@@ -25,7 +25,7 @@ process MLST {
     def prefix = task.ext.prefix ?: "${meta.id}"
     // mlst is suppose to allow gz and non-gz, but when run in the container (outside of the pipeline) it doesn't work. Also, doesn't work on terra so adding unzip step
     def container = task.container.toString() - "quay.io/jvhagey/mlst@"
-    def mlst_version = "2.23.0_12312024"
+    def mlst_version = "2.25.0_20251231"
     def mlst_version_clean = mlst_version.split("_")[0]
     """
     if [[ ${fasta} = *.gz ]]
@@ -118,15 +118,19 @@ process MLST {
 
     #handling to get database version being used
     if [[ $terra == false ]]; then
-        db_version=\$(cat /mlst-${mlst_version_clean}/db/db_version | date -f - +%Y-%m-%d )
+        # db_version=\$(cat /mlst-${mlst_version_clean}/db/db_version | date -f - +%Y-%m-%d )
+        echo "using container version as db version"
     else
         db_version=\$(cat /opt/conda/envs/phoenix/db/db_version | date -f - +%Y-%m-%d )
     fi
 
+    mlst=\$( echo \$(mlst --version 2>&1) | sed 's/mlst //' )
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         mlst: \$( echo \$(mlst --version 2>&1) | sed 's/mlst //' )
-        mlst_db: \$db_version
+        mlst_db: ${mlst}_${container}
+        # mlst_db: \$db_version
         mlst_container: ${container}
     END_VERSIONS
     """
