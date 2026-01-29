@@ -2,7 +2,7 @@ process MLST {
     tag "$meta.id"
     label 'process_medium'
     // 2.23.0_12312024 - must edit manually below (line 28)!!!
-    container 'quay.io/jvhagey/mlst@sha256:a67904d356118f9c163d26000d4d78cc449e3205145f87be28726869d67602f7'
+    container 'staphb/mlst:2.32.2'
 
     input:
     tuple val(meta), path(fasta), val(fairy_outcome), path(taxonomy)
@@ -24,8 +24,8 @@ process MLST {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     // mlst is suppose to allow gz and non-gz, but when run in the container (outside of the pipeline) it doesn't work. Also, doesn't work on terra so adding unzip step
-    def container = task.container.toString() - "quay.io/jvhagey/mlst@"
-    def mlst_version = "2.25.0_20251231"
+    def container = task.container.toString() - "staphb/mlst:2.32.2"
+    def mlst_version = "2.32.2"
     def mlst_version_clean = mlst_version.split("_")[0]
     """
     if [[ ${fasta} = *.gz ]]
