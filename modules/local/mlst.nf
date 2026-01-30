@@ -70,6 +70,11 @@ process MLST {
         mlst --scheme ecoli --threads $task.cpus \$unzipped_fasta > ${prefix}_2.tsv
         cat ${prefix}_1.tsv ${prefix}_2.tsv > ${prefix}.tsv
         rm ${prefix}_*.tsv
+    elif [[ \$scheme == "ecoli_achtman_4" ]]; then
+        mv ${prefix}.tsv ${prefix}_1.tsv
+        mlst --scheme ecoli --threads $task.cpus \$unzipped_fasta > ${prefix}_2.tsv
+        cat ${prefix}_1.tsv ${prefix}_2.tsv > ${prefix}.tsv
+        rm ${prefix}_*.tsv
     elif [[ \${genus,,} == "mycobacterium" ]]; then
         if [[ \$scheme == "mabscessus" ]]; then
             mv ${prefix}.tsv ${prefix}_1.tsv
