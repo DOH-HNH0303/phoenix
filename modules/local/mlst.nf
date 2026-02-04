@@ -73,7 +73,7 @@ process MLST {
     elif [[ \$scheme == "ecoli_achtman_4" ]]; then
         if [[ \${genus,,} == "klebsiella" ]]; then
             mv ${prefix}.tsv ${prefix}.OLD-tsv
-            mlst --scheme klebsiella --threads 4 $unzipped_fasta > ${prefix}.tsv
+            mlst --scheme klebsiella --threads $task.cpus \$unzipped_fasta > ${prefix}.tsv
         else
             mv ${prefix}.tsv ${prefix}_1.tsv
             mlst --scheme ecoli --threads $task.cpus \$unzipped_fasta > ${prefix}_2.tsv || mlst --scheme ecoli_2 --threads $task.cpus \$unzipped_fasta > ${prefix}_2.tsv
