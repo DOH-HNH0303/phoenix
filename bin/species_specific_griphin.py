@@ -152,7 +152,7 @@ def fill_taxa_id(row):
         species = row['Kraken_ID_Raw_Reads_%'].split(" ")[2]
         return genus + " " + species
     elif row['Taxa_Source'] == 'ShigaPass':
-        return row['ShigaPass_Organism']
+        return row['ShigaPass_Organism'] if 'ShigaPass_Organism' in row.index else None
     else:
         return 'Unknown'  # Default case if no condition matches
 
